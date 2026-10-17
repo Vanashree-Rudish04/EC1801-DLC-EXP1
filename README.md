@@ -122,6 +122,7 @@ and successfully implemented using Verilog HDL.
 <img width="1920" height="1080" alt="Screenshot 2026-10-15 123613" src="https://github.com/user-attachments/assets/cd0ae5e9-e28d-4cbb-b955-70eb201faa99" />
 
 
-Result
+Result:
+
 Thus, the Boolean function was minimized, implemented using Verilog HDL, successfully simulated using Synopsys VCS, and verified using Synopsys DVE.
 
