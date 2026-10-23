@@ -21,43 +21,62 @@ exp1_boolean_min.vcd	VCD waveform dump generated during simulation
 
 ## Verilog Program
 ```
-module fun (
+module boolfun (
 input wire A, 
 input wire B, 
+input wire C, 
+input wire D, 
 output wire F 
 ); 
-assign F = (~A) | B ;    // F = A' + B 
+assign F = (~B & ~D)|(B & D) ;    // F = B'D' + BD 
 endmodule
 ```
 
 ## TestBench Program
 ```
-// gedit tb.v
-module tb;
-    reg A, B;
-    wire F;
-    // Instantiate the design under test (DUT)
-    fun uut (
-        .A(A),
-        .B(B),
-        .F(F)
-    );
+module boolfun_tb;
 
-    initial begin
-        // ---- VCD dump setup ----
-        $dumpfile("fun.vcd");   // name of the VCD file to be generated
-        $dumpvars(0, tb);   // dump all signals in this testbench hierarchy
+reg A, B, C, D;
+wire F;
 
-        // ---- Apply all 4 input combinations ----
-        $monitor("Time=%0t A=%b B=%b | F=%b", $time, A, B, F);
+boolfun uut (
+    .A(A),
+    .B(B),
+    .C(C),
+    .D(D),
+    .F(F)
+);
 
-        A = 0; B = 0; #10;
-        A = 0; B = 1; #10;
-        A = 1; B = 0; #10;
-        A = 1; B = 1; #10;
+initial begin
 
-        #10 $finish;
-    end
+    $dumpfile("boolfun.vcd");
+    $dumpvars(0, boolfun_tb);
+
+    $monitor("Time=%0t A=%b B=%b C=%b D=%b F=%b",
+              $time, A, B, C, D, F);
+
+    A=0; B=0; C=0; D=0; #10;
+    A=0; B=0; C=0; D=1; #10;
+    A=0; B=0; C=1; D=0; #10;
+    A=0; B=0; C=1; D=1; #10;
+
+    A=0; B=1; C=0; D=0; #10;
+    A=0; B=1; C=0; D=1; #10;
+    A=0; B=1; C=1; D=0; #10;
+    A=0; B=1; C=1; D=1; #10;
+
+    A=1; B=0; C=0; D=0; #10;
+    A=1; B=0; C=0; D=1; #10;
+    A=1; B=0; C=1; D=0; #10;
+    A=1; B=0; C=1; D=1; #10;
+
+    A=1; B=1; C=0; D=0; #10;
+    A=1; B=1; C=0; D=1; #10;
+    A=1; B=1; C=1; D=0; #10;
+    A=1; B=1; C=1; D=1; #10;
+
+    $finish;
+end
 
 endmodule
 
@@ -117,11 +136,13 @@ The Boolean function
 F(A,B,C,D)=Σm(0,2,5,7,8,10,13,15), which simplifies to F=B'D'+BD.
 was minimized to F=B'D'+BD.
 and successfully implemented using Verilog HDL.
-<img width="1914" height="249" alt="Screenshot 2026-10-22 123954" src="https://github.com/user-attachments/assets/0662c355-5acc-4cdb-89f0-bcacad039beb" />
+<img width="1902" height="492" alt="Screenshot 2026-10-23 124025" src="https://github.com/user-attachments/assets/999b5753-8433-4080-bbe3-3aba678c9137" />
+
 
 
 ## OUTPUT
-<img width="1920" height="1080" alt="Screenshot 2026-10-15 123613" src="https://github.com/user-attachments/assets/cd0ae5e9-e28d-4cbb-b955-70eb201faa99" />
+<img width="1920" height="1080" alt="Screenshot 2026-10-23 124247" src="https://github.com/user-attachments/assets/ad14c11a-7bb8-4633-9615-11c9c7bdd95c" />
+
 
 
 
